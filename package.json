@@ -4,13 +4,12 @@
   "description": "sdc-questions-answers",
   "main": "index.js",
   "scripts": {
-    "start":"",
+    "start": "nodemon ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dockerWeb": "docker build . -t dmcin003/sdc-node -f .web",
-    "dockerRunWeb":"docker run -p 3000:3000 -d --name sdc-node dmcin003/sdc-node",
-    "dockerDb":"docker build . -t dmcin003/sdc-node--db -f .db",
-    "dockerRundb":"docker run -p 5432:5432 -d --name sdc-node-db dmcin003/sdc-node-db"
-
+    "dockerRunWeb": "docker run -p 3000:3000 -d --name sdc-node dmcin003/sdc-node",
+    "dockerDb": "docker build . -t dmcin003/sdc-node--db -f .db",
+    "dockerRundb": "docker run -p 5432:5432 -d --name sdc-node-db dmcin003/sdc-node-db"
   },
   "repository": {
     "type": "git",
@@ -23,6 +22,8 @@
   },
   "homepage": "https://github.com/Team-Ferdinand/SDC-Q-A#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.7.1"
   }
 }

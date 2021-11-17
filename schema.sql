@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS Questions(
-  id INTEGER NOT NULL,
-  product_id INTEGER,
-  body varchar(255),
-  date_written varchar(255),
-  asker_name varchar(255),
+  id SERIAL NOT NULL,
+  product_id INTEGER NOT NULL,
+  body varchar(255) DEFAULT NULL,
+  date_written varchar(255) DEFAULT NULL,
+  asker_name varchar(255) DEFAULT NULL,
   asker_email varchar(255),
-  reported BOOLEAN,
-  helpful INTEGER,
+  reported BOOLEAN DEFAULT NULL,
+  helpful INTEGER DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
@@ -17,14 +17,14 @@ CSV HEADER;
 
 
 CREATE TABLE IF NOT EXISTS Answers(
-  id INTEGER NOT NULL,
-  question_id INTEGER,
-  body varchar(255),
-  date_written varchar(255),
-  answerer_name varchar(255),
-  answerer_email varchar(255),
-  reported BOOLEAN,
-  helpful INTEGER,
+  id SERIAL NOT NULL,
+  question_id INTEGER NOT NULL,
+  body varchar(255) DEFAULT NULL,
+  date_written varchar(255) DEFAULT NULL,
+  answerer_name varchar(255) DEFAULT NULL,
+  answerer_email varchar(255) DEFAULT NULL,
+  reported BOOLEAN DEFAULT NULL,
+  helpful INTEGER DEFAULT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (question_id)
   REFERENCES Questions (id)
@@ -36,9 +36,9 @@ DELIMITER ','
 CSV HEADER;
 
 CREATE TABLE IF NOT EXISTS Answers_photos(
-  id INTEGER NOT NULL,
-  answer_id INTEGER,
-  url varchar(450),
+  id SERIAL NOT NULL,
+  answer_id INTEGER NOT NULL,
+  url varchar(450) DEFAULT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (answer_id)
   REFERENCES Answers (id)
