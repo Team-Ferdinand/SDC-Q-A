@@ -1,3 +1,8 @@
+
+DROP TABLE IF EXISTS 'Questions' CASCADE;
+DROP TABLE IF EXISTS 'Answers' CASCADE;
+DROP TABLE IF EXISTS 'Answers_photos' CASCADE;
+
 CREATE TABLE IF NOT EXISTS Questions(
   id SERIAL NOT NULL,
   product_id INTEGER NOT NULL,
@@ -14,6 +19,7 @@ COPY Questions(id,product_id,body,date_written,asker_name,asker_email,reported,h
 FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/questions.csv'
 DELIMITER ','
 CSV HEADER;
+
 
 
 CREATE TABLE IF NOT EXISTS Answers(
@@ -34,6 +40,7 @@ COPY Answers(id,question_id,body,date_written,answerer_name,answerer_email,repor
 FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/answers.csv'
 DELIMITER ','
 CSV HEADER;
+
 
 CREATE TABLE IF NOT EXISTS Answers_photos(
   id SERIAL NOT NULL,
