@@ -1,12 +1,7 @@
 const { Pool } = require("pg");
+const db = require("../../config.js");
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "QA",
-  password: "",
-  port: 5432,
-});
+const pool = new Pool(db.CONFIG);
 
 pool.connect(() => {
   console.log("connected to db");
