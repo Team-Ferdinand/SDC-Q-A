@@ -19,4 +19,18 @@ module.exports = {
         `
     );
   },
+
+  create: () => {
+    const date = new Date();
+    const helpful = 0;
+    const reported = false;
+
+    return db.pool
+      .query(`insert into answers(id,question_id, body, answerer_name, answerer_email, reported, helpful)
+    values(${id},${product_id},'${body}','${name}','${email}',${reported},${helpful})`);
+  },
+
+  insertPhotos: () => {
+    return db.pool.query();
+  },
 };
