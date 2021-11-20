@@ -16,33 +16,27 @@ app.get("/qa/questions", (req, res) => {
   console.log(req.query);
 
   const product_id = req.query.product_id || undefined;
-  const count = req.query.count || 5;
-  const page = req.query.page || 1;
 
-  const response = { product_id: product_id, results: [] };
+  const count = req.query.count || 5;
+  console.log(
+    "🚀 ~ file: index.js ~ line 21 ~ app.get ~ req.query.count",
+    req.query.count
+  );
+  console.log("🚀 ~ file: index.js ~ line 20 ~ app.get ~ count", count);
+  const page = req.query.page || 1;
+  console.log("🚀 ~ file: index.js ~ line 22 ~ app.get ~ page", page);
+
+  let response = {
+    product_id: product_id,
+    results: [],
+  };
 
   if (product_id) {
     qModel
       .getQuestions(product_id, count, page)
       .then(({ rows }) => {
         response.results = rows;
-        // res.json(data);
-        const promises = rows.map((question) => {
-          return aModel.getAnswers(question.id);
-        });
-        return Promise.all(promises);
-      })
-      .then((data) => {
-        const answers = data.map((answer) => {
-          return answer.rows;
-        });
-
-        for (let i = 0; i < response.results.length; i++) {
-          response.results[i].answers = answers[i];
-          for (let j = 0; j < response.results[i].answers.length; j++) {}
-        }
-
-        res.json(answers);
+        res.json(response);
       })
       .catch((err) => {
         res.status(500).send(err);
@@ -53,21 +47,22 @@ app.get("/qa/questions", (req, res) => {
 });
 
 app.get(`/qa/questions/:question_id/answers`, (req, res) => {
-  const question_id = req.params.question_id;
-  console.log(question_id);
+  const question_id = req.params.question_id || undefined;
+  const count = req.query.count || 5;
+  const page = req.query.page || 1;
+
+  let response = {
+    question: question_id,
+    page: page,
+    count: count,
+    results: [],
+  };
+
   aModel
-    .getAnswers(question_id)
+    .getAnswers(question_id, page, count)
     .then(({ rows }) => {
-      const promises = rows.map((answer) => {
-        return aModel.getPhotos(answer.id);
-      });
-      return Promise.all(promises);
-    })
-    .then((data) => {
-      const photos = data.map((photo) => {
-        return photo.rows;
-      });
-      res.json(photos);
+      response.results = rows;
+      res.json(response);
     })
     .catch((err) => {
       res.status(500).send(err);
@@ -75,7 +70,8 @@ app.get(`/qa/questions/:question_id/answers`, (req, res) => {
 });
 
 app.post("/qa/questions", (req, res) => {
-  res.json("we posting");
+  qModel.create();
+  res.json(req.body);
 });
 
 app.post(`/qa/questions/:question_id/answers`, (req, res) => {
@@ -83,13 +79,20 @@ app.post(`/qa/questions/:question_id/answers`, (req, res) => {
 });
 
 //set to 'helpful or report'
-const updatee = "";
 
-app.put(`/qa/questions/:qustion_id/${updatee}`, (req, res) => {
+app.put(`/qa/questions/:qustion_id/helpful`, (req, res) => {
   res.json(req.params);
 });
 
-app.put(`/qa/answers/:answer_id/${updatee}`, (req, res) => {
+app.put(`/qa/questions/:qustion_id/report`, (req, res) => {
+  res.json(req.params);
+});
+
+app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
+  res.json(req.params);
+});
+
+app.put(`/qa/answers/:answer_id/report`, (req, res) => {
   res.json(req.params);
 });
 
