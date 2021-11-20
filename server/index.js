@@ -1,8 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db/index.js");
-const qModel = require("./db/models/questions.js");
-const aModel = require("./db/models/answers.js");
+const Q = require("./db/models/questions.js");
+const A = require("./db/models/answers.js");
 const app = express();
 const port = 3000;
 
@@ -32,8 +32,7 @@ app.get("/qa/questions", (req, res) => {
   };
 
   if (product_id) {
-    qModel
-      .getQuestions(product_id, count, page)
+    Q.getQuestions(product_id, count, page)
       .then(({ rows }) => {
         response.results = rows;
         res.json(response);
@@ -58,8 +57,7 @@ app.get(`/qa/questions/:question_id/answers`, (req, res) => {
     results: [],
   };
 
-  aModel
-    .getAnswers(question_id, page, count)
+  A.getAnswers(question_id, page, count)
     .then(({ rows }) => {
       response.results = rows;
       res.json(response);
@@ -70,30 +68,101 @@ app.get(`/qa/questions/:question_id/answers`, (req, res) => {
 });
 
 app.post("/qa/questions", (req, res) => {
-  qModel.create();
-  res.json(req.body);
+  Q.maxId()
+    .then(({ rows }) => {
+      let id = rows[0].max + 1;
+      return Q.create(req.body, id);
+    })
+    .then((data) => {
+      res.status(201).json(data);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
+    });
 });
 
 app.post(`/qa/questions/:question_id/answers`, (req, res) => {
-  res.json(req.params);
+  //NOT WORKING!
+  const question_id = req.params.question_id;
+  let created_answer_id;
+  let answers_photo_id;
+  A.maxAnswersID()
+    .then(({ rows }) => {
+      created_answer_id = rows[0].max + 1;
+      return Q.create(req.body, question_id, created_answer_id);
+    })
+    .then((data) => {
+      A.maxPhotosID().then(({ rows }) => {
+        answers_photo_id = rows[0].max + 1;
+      });
+    });
 });
 
-//set to 'helpful or report'
-
-app.put(`/qa/questions/:qustion_id/helpful`, (req, res) => {
-  res.json(req.params);
+app.put(`/qa/questions/:question_id/helpful`, (req, res) => {
+  const question_id = req.params.question_id;
+  console.log(
+    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
+    question_id
+  );
+  Q.updateHelpfulness(question_id)
+    .then((data) => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
+    });
 });
 
-app.put(`/qa/questions/:qustion_id/report`, (req, res) => {
-  res.json(req.params);
+app.put(`/qa/questions/:question_id/report`, (req, res) => {
+  const question_id = req.params.question_id;
+  console.log(
+    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
+    question_id
+  );
+  Q.updateReport(question_id)
+    .then((data) => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
+    });
 });
 
 app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
-  res.json(req.params);
+  //TEST IN POSTMAN
+  const answer_id = req.params.answer_id;
+  console.log(
+    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
+    answer_id
+  );
+  A.updateReport(answer_id)
+    .then((data) => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
+    });
 });
 
 app.put(`/qa/answers/:answer_id/report`, (req, res) => {
-  res.json(req.params);
+  //TEST IN POSTMAN
+  const answer_id = req.params.answer_id;
+  console.log(
+    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
+    answer_id
+  );
+  A.updateReport(answer_id)
+    .then((data) => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
+    });
 });
 
 app.listen(port, (err) => {

@@ -15,30 +15,42 @@ module.exports = {
         where ap.answer_id=a.id
        ) ))answers
          from answers as a
-         where a.question_id=q.id
+         where a.question_id=q.id and a.reported=false
         )
       from questions as q
-      where q.product_id=${product_id}
+      where q.product_id=${product_id} and q.reported=false
       offset ${(page - 1) * count}
       limit ${count}`
     );
   },
 
-  create: () => {
-    const date = new Date();
-    console.log("🚀 ~ file: questions.js ~ line 29 ~ date", date);
+  maxId: () => {
+    return db.pool.query("select max(id) from questions");
+  },
 
-    // return db.pool.query(
-    //   `insert into questions(body,asker_name,asker_email,product_id)`
-    // )
+  create: ({ body, name, email, product_id }, id) => {
+    console.log("🚀 ~ file: questions.js ~ line 32 ~ id", id);
+    const date = Date.now();
+    console.log("🚀 ~ file: questions.js ~ line 34 ~ date", date);
+    const helpful = 0;
+    const reported = false;
+
+    return db.pool
+      .query(`insert into questions(id,product_id, body,date_written,asker_name, asker_email, reported, helpful)
+    values(${id},${product_id},'${body}',to_timestamp(${date} / 1000.0),'${name}','${email}',${reported},${helpful})`);
+  },
+
+  updateHelpfulness: (question_id) => {
+    return db.pool.query(
+      `update questions set helpful=helpful + 1 where id=${question_id}
+      returning *`
+    );
+  },
+
+  updateReport: (question_id) => {
+    return db.pool.query(
+      `update questions set reported=true where id=${question_id}
+      returning *`
+    );
   },
 };
-
-// id SERIAL NOT NULL,
-//   product_id INTEGER NOT NULL,
-//   body varchar(255) DEFAULT NULL,
-//   date_written bigint,
-//   asker_name varchar(255) DEFAULT NULL,
-//   asker_email varchar(255)DEFAULT NULL,
-//   reported BOOLEAN DEFAULT NULL,
-//   helpful INTEGER DEFAULT NULL,
