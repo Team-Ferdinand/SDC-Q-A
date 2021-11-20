@@ -71,3 +71,13 @@ ALTER COLUMN date_written TYPE timestamptz USING to_timestamp(CAST(date_written 
 
 ALTER TABLE questions
 ALTER COLUMN date_written TYPE timestamptz USING to_timestamp(CAST(date_written as bigint)/1000);
+
+CREATE INDEX idx_question_id
+ON answers(question_id);
+
+
+CREATE INDEX idx_product_id
+ON questions(product_id);
+
+CREATE INDEX idx_answers_id
+ON answers_photos(answer_id);
