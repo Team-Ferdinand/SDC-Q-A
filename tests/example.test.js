@@ -1,7 +1,15 @@
-const questions = require("../server/db/models/questions.js");
+const frisby = require("frisby");
+const server = require("../server/index.js");
 
-test("I am an example test", () => {
-  const product_id = 1;
-  questions.getQuestions(product_id, count, page);
-  expect("Testing the speed of this query");
+it("Query speed test", async () => {
+  let start = Date.now();
+  let response = await frisby
+    .get(`http://127.0.0.1:3000/qa/questions?product_id=1`)
+
+    .expect("status", 200);
+
+  let duration = Date.now() - start;
+  console.log("🚀 ~ file: example.test.js ~ line 12 ~ it ~ duration", duration);
+
+  expect(duration).toBeLessThan(500);
 });

@@ -18,7 +18,7 @@ module.exports = {
          where a.question_id=q.id and a.reported=false
         )
       from questions as q
-      where q.product_id=${product_id} and q.reported=false
+      where q.product_id=${product_id}
       offset ${(page - 1) * count}
       limit ${count}`
     );
