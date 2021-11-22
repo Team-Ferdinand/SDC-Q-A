@@ -18,13 +18,8 @@ app.get("/qa/questions", (req, res) => {
   const product_id = req.query.product_id || undefined;
 
   const count = req.query.count || 5;
-  console.log(
-    "🚀 ~ file: index.js ~ line 21 ~ app.get ~ req.query.count",
-    req.query.count
-  );
-  console.log("🚀 ~ file: index.js ~ line 20 ~ app.get ~ count", count);
+
   const page = req.query.page || 1;
-  console.log("🚀 ~ file: index.js ~ line 22 ~ app.get ~ page", page);
 
   let response = {
     product_id: product_id,
@@ -87,15 +82,36 @@ app.post(`/qa/questions/:question_id/answers`, (req, res) => {
   const question_id = req.params.question_id;
   let created_answer_id;
   let answers_photo_id;
+  let promises = [];
   A.maxAnswersID()
     .then(({ rows }) => {
       created_answer_id = rows[0].max + 1;
-      return Q.create(req.body, question_id, created_answer_id);
+      return A.create(req.body, question_id, created_answer_id);
     })
     .then((data) => {
-      A.maxPhotosID().then(({ rows }) => {
-        answers_photo_id = rows[0].max + 1;
+      return A.maxPhotosID();
+    })
+    .then(({ rows }) => {
+      const maxId = rows[0].max;
+      const promises = req.body.photos.map((url, index) => {
+        console.log("🚀 ~ file: index.js ~ line 102 ~ promises ~ index", index);
+        let photoId = maxId + (index + 1);
+        console.log(
+          "🚀 ~ file: index.js ~ line 103 ~ promises ~ photoId",
+          photoId
+        );
+
+        return A.insertPhoto(photoId, created_answer_id, url);
       });
+      console.log("Are we getting here");
+      return Promise.all(promises);
+    })
+    .then((data) => {
+      res.status(201).json(data);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+      console.log(err);
     });
 });
 
@@ -132,7 +148,6 @@ app.put(`/qa/questions/:question_id/report`, (req, res) => {
 });
 
 app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
-  //TEST IN POSTMAN
   const answer_id = req.params.answer_id;
   console.log(
     "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
@@ -149,7 +164,6 @@ app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
 });
 
 app.put(`/qa/answers/:answer_id/report`, (req, res) => {
-  //TEST IN POSTMAN
   const answer_id = req.params.answer_id;
   console.log(
     "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",

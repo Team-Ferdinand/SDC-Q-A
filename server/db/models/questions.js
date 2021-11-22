@@ -18,7 +18,7 @@ module.exports = {
          where a.question_id=q.id and a.reported=false
         )
       from questions as q
-      where q.product_id=${product_id}
+      where q.product_id=${product_id} and q.reported=false
       offset ${(page - 1) * count}
       limit ${count}`
     );
@@ -29,15 +29,12 @@ module.exports = {
   },
 
   create: ({ body, name, email, product_id }, id) => {
-    console.log("🚀 ~ file: questions.js ~ line 32 ~ id", id);
-    const date = Date.now();
-    console.log("🚀 ~ file: questions.js ~ line 34 ~ date", date);
     const helpful = 0;
     const reported = false;
 
     return db.pool
-      .query(`insert into questions(id,product_id, body,date_written,asker_name, asker_email, reported, helpful)
-    values(${id},${product_id},'${body}',to_timestamp(${date} / 1000.0),'${name}','${email}',${reported},${helpful})`);
+      .query(`insert into questions(id,product_id, body , date_written,asker_name , asker_email , reported, helpful)
+    values(${id},${product_id},'${body}',to_timestamp(${Date.now()} / 1000.0),'${name}','${email}',${reported},${helpful})`);
   },
 
   updateHelpfulness: (question_id) => {

@@ -25,22 +25,21 @@ module.exports = {
   },
 
   create: ({ body, name, email }, question_id, id) => {
-    const date = new Date();
     const helpful = 0;
     const reported = false;
 
     return db.pool
-      .query(`insert into answers(id,question_id, body, date_written ,answerer_name, answerer_email, reported, helpful)
-    values(${id},${question_id},'${body}',to_timestamp(${date} / 1000.0),'${name}','${email}',${reported},${helpful})`);
+      .query(`insert into answers(id,question_id, body,date_written,answerer_name, answerer_email, reported, helpful)
+    values(${id},${question_id},'${body}',to_timestamp(${Date.now()}/1000.0),'${name}','${email}',${reported},${helpful})`);
   },
 
   maxPhotosID: () => {
     return db.pool.query("select max(id) from answers_photos");
   },
 
-  insertPhoto: (photo) => {
+  insertPhoto: (id, answer_id, url) => {
     return db.pool.query(`insert into answers_photos(id,answer_id,url)
-      values(${id},${answer_id},${url})`);
+      values(${id},${answer_id},'${url}')`);
   },
 
   updateHelpfulness: (answer_id) => {

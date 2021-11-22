@@ -56,12 +56,7 @@ FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/answers_photos.csv'
 DELIMITER ','
 CSV HEADER;
 
--- select to_timestamp(cast(date_written/1000 as bigint))::date
--- from questions
 
-
--- SELECT to_timestamp(CAST(date_written as bigint)/1000)
--- FROM answers
 
 
 
