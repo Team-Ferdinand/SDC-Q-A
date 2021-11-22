@@ -1,12 +1,14 @@
 config:
   target: "http://127.0.0.1:3000"
   phases:
-    - duration: 30
-      arrivalRate: 1000
+    - duration: 60
+      arrivalRate: 300
       name: Warm up
 
 scenarios:
   - name: "get questions for product 1"
     flow:
       - get:
-          url: "/qa/questions?product_id=3&count=20"
+          url: "/qa/questions?product_id=3&count=5"
+      - get:
+          url: "/qa/questions/2/answers?count=5"
