@@ -76,3 +76,6 @@ ON questions(product_id);
 
 CREATE INDEX idx_answers_id
 ON answers_photos(answer_id);
+
+
+-- ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77

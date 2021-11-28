@@ -12,6 +12,10 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 //routes
+app.get("/", (req, res) => {
+  res.json(`Welcome to Darron's API service`);
+});
+
 app.get("/qa/questions", (req, res) => {
   console.log(req.query);
 
@@ -78,7 +82,6 @@ app.post("/qa/questions", (req, res) => {
 });
 
 app.post(`/qa/questions/:question_id/answers`, (req, res) => {
-  //NOT WORKING!
   const question_id = req.params.question_id;
   let created_answer_id;
   let answers_photo_id;
@@ -103,7 +106,7 @@ app.post(`/qa/questions/:question_id/answers`, (req, res) => {
 
         return A.insertPhoto(photoId, created_answer_id, url);
       });
-      console.log("Are we getting here");
+
       return Promise.all(promises);
     })
     .then((data) => {
