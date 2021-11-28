@@ -13,7 +13,7 @@ app.use(morgan("dev"));
 
 //routes
 app.get("/", (req, res) => {
-  res.json(`Welcome to Darron's API service`);
+  res.json(`Welcome to Darron's API service for questions and answers`);
 });
 
 app.get("/qa/questions", (req, res) => {
