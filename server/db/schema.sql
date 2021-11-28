@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS questions(
 );
 
 COPY questions(id,product_id,body,date_written,asker_name,asker_email,reported,helpful)
-FROM '/home/ubuntu/data/questions.csv'
+FROM '../../../data/questions.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS answers(
 );
 
 COPY answers(id,question_id,body,date_written,answerer_name,answerer_email,reported,helpful)
-FROM '/home/ubuntu/data/answers.csv'
+FROM '../../../data/answers.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS answers_photos(
 );
 
 COPY answers_photos(id,answer_id,url)
-FROM '/home/ubuntu/data/answers_photos.csv'
+FROM '../../../data/answers_photos.csv'
 DELIMITER ','
 CSV HEADER;
 
