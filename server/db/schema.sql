@@ -1,4 +1,6 @@
 
+\c qa postgres
+
 DROP TABLE IF EXISTS questions CASCADE;
 DROP TABLE IF EXISTS answers CASCADE;
 DROP TABLE IF EXISTS answers_photos CASCADE;
@@ -16,7 +18,7 @@ CREATE TABLE IF NOT EXISTS questions(
 );
 
 COPY questions(id,product_id,body,date_written,asker_name,asker_email,reported,helpful)
-FROM '/home/ubuntu/data/questions.csv'
+FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/questions.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -37,7 +39,7 @@ CREATE TABLE IF NOT EXISTS answers(
 );
 
 COPY answers(id,question_id,body,date_written,answerer_name,answerer_email,reported,helpful)
-FROM '/home/ubuntu/data/answers.csv'
+FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/answers.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS answers_photos(
 );
 
 COPY answers_photos(id,answer_id,url)
-FROM '/home/ubuntu/data/answers_photos.csv'
+FROM '/Users/dmcin003/Desktop/SDC/SDC-Q-A/data/answers_photos.csv'
 DELIMITER ','
 CSV HEADER;
 
@@ -79,3 +81,4 @@ ON answers_photos(answer_id);
 
 
 -- ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77
+

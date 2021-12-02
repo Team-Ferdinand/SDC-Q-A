@@ -17,8 +17,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/qa/questions", (req, res) => {
-  console.log(req.query);
-
   const product_id = req.query.product_id || undefined;
 
   const count = req.query.count || 5;
@@ -38,6 +36,7 @@ app.get("/qa/questions", (req, res) => {
       })
       .catch((err) => {
         res.status(500).send(err);
+        console.log(err);
       });
   } else {
     res.status(500).send("Invalid product id");
@@ -63,6 +62,7 @@ app.get(`/qa/questions/:question_id/answers`, (req, res) => {
     })
     .catch((err) => {
       res.status(500).send(err);
+      console.log(err);
     });
 });
 
@@ -97,12 +97,7 @@ app.post(`/qa/questions/:question_id/answers`, (req, res) => {
     .then(({ rows }) => {
       const maxId = rows[0].max;
       const promises = req.body.photos.map((url, index) => {
-        console.log("🚀 ~ file: index.js ~ line 102 ~ promises ~ index", index);
         let photoId = maxId + (index + 1);
-        console.log(
-          "🚀 ~ file: index.js ~ line 103 ~ promises ~ photoId",
-          photoId
-        );
 
         return A.insertPhoto(photoId, created_answer_id, url);
       });
@@ -120,10 +115,7 @@ app.post(`/qa/questions/:question_id/answers`, (req, res) => {
 
 app.put(`/qa/questions/:question_id/helpful`, (req, res) => {
   const question_id = req.params.question_id;
-  console.log(
-    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
-    question_id
-  );
+
   Q.updateHelpfulness(question_id)
     .then((data) => {
       res.status(204).end();
@@ -136,10 +128,7 @@ app.put(`/qa/questions/:question_id/helpful`, (req, res) => {
 
 app.put(`/qa/questions/:question_id/report`, (req, res) => {
   const question_id = req.params.question_id;
-  console.log(
-    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
-    question_id
-  );
+
   Q.updateReport(question_id)
     .then((data) => {
       res.status(204).end();
@@ -152,10 +141,7 @@ app.put(`/qa/questions/:question_id/report`, (req, res) => {
 
 app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
   const answer_id = req.params.answer_id;
-  console.log(
-    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
-    answer_id
-  );
+
   A.updateReport(answer_id)
     .then((data) => {
       res.status(204).end();
@@ -168,10 +154,7 @@ app.put(`/qa/answers/:answer_id/helpful`, (req, res) => {
 
 app.put(`/qa/answers/:answer_id/report`, (req, res) => {
   const answer_id = req.params.answer_id;
-  console.log(
-    "🚀 ~ file: index.js ~ line 104 ~ app.put ~ question_id",
-    answer_id
-  );
+
   A.updateReport(answer_id)
     .then((data) => {
       res.status(204).end();
@@ -188,5 +171,3 @@ app.listen(port, (err) => {
   }
   console.log(`server is listening on port ${port}`);
 });
-
-// module.exports.app = app;

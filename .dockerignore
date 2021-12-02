@@ -1,5 +1,7 @@
 data/
-
+config/
+tests/
+backup.sql
 node_modules
 
 

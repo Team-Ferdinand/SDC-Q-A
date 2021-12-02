@@ -14,9 +14,18 @@ it("Query speed test", async () => {
   expect(duration).toBeLessThan(500);
 });
 
-it("get request should send back a status of 200", async () => {
+it("get request for questions endpoint should send back a status of 200", async () => {
   let response = await frisby
     .get(`http://127.0.0.1:3000/qa/questions?product_id=1`)
+
+    .expect("status", 200);
+
+  return response;
+});
+
+it("get request for answers endpoint should send back a status of 200", async () => {
+  let response = await frisby
+    .get(`http://127.0.0.1:3000/qa/questions/1/answers`)
 
     .expect("status", 200);
 
